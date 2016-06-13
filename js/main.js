@@ -2,25 +2,28 @@ var Narnia = {};
 
 (function (cartola) {
 
+    var qtdeTimesProcessados = 0;
+
     var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club'];
     var atletas_pontuados = [];
     var total_pontos = 0.00;
     function get_pontuacao_rodada(nome_time, handleData) {
-        $.get("https://api.cartolafc.globo.com/time/" + nome_time).done(function(data) {
+        $.getJSON("https://jsonp.afeld.me/?callback=?&url=https://api.cartolafc.globo.com/time/" + nome_time, function(data){
             handleData(data);
         });
     }
 
     function get_pontuacao_atletas() {
-        $.get("https://api.cartolafc.globo.com/atletas/pontuados").done(function(data) {
-            atletas_pontuados = data.atletas;
-
-            for (var i = 0; i < times.length; i++) {
-                get_pontuacao_rodada(times[i], function (obj) {
-                    montaTime(obj);
-                });
+        $.getJSON("https://jsonp.afeld.me/?callback=?&url=https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
+            if (data && data.atletas) {
+                atletas_pontuados = data.atletas;
             }
-        })
+            for (var i = 0; i < times.length; i++) {
+                qtdeTimesProcessados++;
+                get_pontuacao_rodada(times[i], montaTime);
+            }
+        });
+
     }
 
     function montaTime(data) {
@@ -126,11 +129,13 @@ var Narnia = {};
         $(document).ready(function () {
             get_pontuacao_atletas();
         }).ajaxStop(function () {
-            quem_paga();
-            ordena();
+            if (qtdeTimesProcessados == times.length) {
+                quem_paga();
+                ordena();
 
-            $('#narnia-table').show();
-            $('#spinner').hide();
+                $('#narnia-table').show();
+                $('#spinner').hide();
+            }
         });
     }
 }(Narnia));
