@@ -5,42 +5,22 @@ var Narnia = {};
     var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club'];
     var atletas_pontuados = [];
     var total_pontos = 0.00;
-
     function get_pontuacao_rodada(nome_time, handleData) {
-        $.ajax({
-            type: "GET",
-            contentType: "application/json",
-            cache: false,
-            url: "load-api.php",
-            data: {
-                api: "busca-time",
-                team_slug: nome_time
-            },
-            success: function (data) {
-                handleData(data);
-            }
+        $.get("https://api.cartolafc.globo.com/time/" + nome_time).done(function(data) {
+            handleData(data);
         });
     }
 
     function get_pontuacao_atletas() {
-        $.ajax({
-            dataType: "json",
-            cache: false,
-            url: "load-api.php",
-            data: {
-                api: "parciais-atletas"
-            },
-            success: function (data) {
-                atletas_pontuados = data.atletas;
-            },
-            complete: function (data) {
-                for (var i = 0; i < times.length; i++) {
-                    get_pontuacao_rodada(times[i], function (obj) {
-                        montaTime(obj);
-                    });
-                }
+        $.get("https://api.cartolafc.globo.com/atletas/pontuados").done(function(data) {
+            atletas_pontuados = data.atletas;
+
+            for (var i = 0; i < times.length; i++) {
+                get_pontuacao_rodada(times[i], function (obj) {
+                    montaTime(obj);
+                });
             }
-        });
+        })
     }
 
     function montaTime(data) {
