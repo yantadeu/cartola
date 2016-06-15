@@ -16,8 +16,8 @@ var Narnia = {};
 
     function get_pontuacao_atletas() {
         $.getJSON("http://cors.io/?u=https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
-            if (data && data.atletas) {
-                atletas_pontuados = data.atletas;
+            if (data && data.responseJSON && data.responseJSON.atletas) {
+                atletas_pontuados = data.responseJSON.atletas;
             }
             for (var i = 0; i < times.length; i++) {
                 qtdeTimesProcessados++;
