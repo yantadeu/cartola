@@ -5,16 +5,11 @@ var Narnia = {};
     var qtdeTimesProcessados = 0;
     var finalizouProcessamento = false;
 
-    var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club'];
+    var times = ['perebas-forever', 'narnia-de-munique', 'sao-bacon-fc', 'goblins-team', 'boletos-fc', 'petrinhus-fc', 'xutebol-club', 'nunes-10'];
     var atletas_pontuados = [];
     var total_pontos = 0.00;
+
     function get_pontuacao_rodada(nome_time, handleData) {
-        $.ajaxSetup({
-            headers : {
-                'Authorization' : 'Basic faskd52352rwfsdfs',
-                'X-PartnerKey' : '3252352-sdgds-sdgd-dsgs-sgs332fs3f'
-            }
-        });
         $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/time/slug/" + nome_time, function(data){
             handleData(data);
         });
