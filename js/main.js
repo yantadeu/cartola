@@ -9,13 +9,19 @@ var Narnia = {};
     var atletas_pontuados = [];
     var total_pontos = 0.00;
     function get_pontuacao_rodada(nome_time, handleData) {
-        $.getJSON("http://cors.io/?u=https://api.cartolafc.globo.com/time/" + nome_time, function(data){
+        $.ajaxSetup({
+            headers : {
+                'Authorization' : 'Basic faskd52352rwfsdfs',
+                'X-PartnerKey' : '3252352-sdgds-sdgd-dsgs-sgs332fs3f'
+            }
+        });
+        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/time/slug/" + nome_time, function(data){
             handleData(data);
         });
     }
 
     function get_pontuacao_atletas() {
-        $.getJSON("http://cors.io/?u=https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
+        $.getJSON("https://cors-anywhere.herokuapp.com/https://api.cartolafc.globo.com/atletas/pontuados").complete(function(data) {
             if (data && data.responseJSON && data.responseJSON.atletas) {
                 atletas_pontuados = data.responseJSON.atletas;
             }
@@ -33,7 +39,7 @@ var Narnia = {};
 
         var nome = data.time.nome;
         var nome_cartola = data.time.nome_cartola;
-        var pontos = data.pontos.toFixed(2);
+        var pontos = data.pontos ? data.pontos.toFixed(2) : 0;
         var patrimonio = data.patrimonio;
 
         var atletas_html = '';
@@ -89,7 +95,7 @@ var Narnia = {};
 
         var parent = $(menorObj).parent().parent();
         parent.addClass('paga-coca');
-        $.get('https://api.riffsy.com/v1/search?tag=coca-cola&key=LIVDSRZULELA', function (data) {
+        $.get('https://cors-anywhere.herokuapp.com/https://api.riffsy.com/v1/search?tag=coca-cola&key=LIVDSRZULELA', function (data) {
             parent.find('.coca').append('<img src="' + data.results[Math.floor(Math.random() * 19)].media[0].gif.url + '" style="height: 100px;">')
         });
     }
